@@ -1,0 +1,17 @@
+Material de refência, fora o do moodle e do man:
+
+
+Sinais
+------
+
+ http://www.delorie.com/gnu/docs/glibc/libc_466.html   : Signal Handling
+ http://www.lynuxworks.com/products/posix/signals.php3 : Signals
+
+
+IO
+--
+
+ http://www.delorie.com/gnu/docs/glibc/libc_257.html : Duplicating Descriptors
+ http://www.delorie.com/gnu/docs/glibc/libc_259.html : File Status Flags
+ http://www.delorie.com/gnu/docs/glibc/libc_296.html : Pipes and FIFOs
+

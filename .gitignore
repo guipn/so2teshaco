@@ -1,0 +1,9 @@
+*.o
+*~
+*swp
+cdoc.pl
+CDocTemplates.pm 
+README.md
+shell
+test/
+libc/

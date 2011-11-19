@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<project name="teshaco" version="0"> 
+
+    <authorship>Guilherme P. Nami</authorship>
+    <authorshipurl>http://guipn.com</authorshipurl>
+
+    <projecturl>http://code.google.com/p/teshaco/</projecturl>
+
+    <introduction>Projeto de shell basico para as aulas de Sistemas Operacionais II.</introduction>
+
+    <docroot>Documentation</docroot>
+
+    <process>.c</process>
+    <process>.default</process>
+
+</project>
