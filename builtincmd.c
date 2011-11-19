@@ -24,30 +24,14 @@
 extern job_node_t *jobs;
 
 
-/**
- * $name my_exit;
- * $proto void my_exit(void);
- *
- * Exibe uma mensagem de despedida e termina a execucao do shell.
- */
-
-void my_exit(void)
+static void my_exit(void)
 {
     puts("\n\tCiao!\n");
     exit(EXIT_SUCCESS);
 }
 
 
-/**
- * $name cd;
- * $proto int cd(char *cmd);
- *
- * Dada uma string como "cd foo", efetua a chamada
- * chdir("foo"). Se a chamada falhar, exibe a respectiva 
- * mensagem de erro setad por chdir.
- */
-
-int cd(char *cmd)
+static int cd(char *cmd)
 {
     char **tokenized = split(cmd, " ");
 
@@ -65,13 +49,13 @@ int cd(char *cmd)
 }
 
 
-void show_jobs(void)
+static void show_jobs(void)
 {
     print_jobs(jobs);
 }
 
 
-void bg(char *cmd)
+static void bg(char *cmd)
 {
     char **tokenized = split(cmd, " ");
 
@@ -86,7 +70,7 @@ void bg(char *cmd)
 }
 
 
-void fg(char *cmd)
+static void fg(char *cmd)
 {
     char **tokenized = split(cmd, " ");
 
@@ -101,7 +85,7 @@ void fg(char *cmd)
 }
 
 
-void help(void)
+static void help(void)
 {
     static const char *helpmsg = 
     "\n\t teshaco - Lista de Comandos\n\t ===========================\n\n"

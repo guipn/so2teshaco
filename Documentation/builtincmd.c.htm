@@ -16,25 +16,11 @@
 
     
     <h2>Function Summary</h2>
-        <a href="#my_exit;"><h3>my_exit;</h3></a> <ShortDescription> <br/>
-    <a href="#cd;"><h3>cd;</h3></a> <ShortDescription> <br/>
-    <a href="#run_builtin;"><h3>run_builtin;</h3></a> <ShortDescription> <br/>
+        <a href="#run_builtin;"><h3>run_builtin;</h3></a> <ShortDescription> <br/>
 
     <p/>
     <hr/>
-        <h2><a name="my_exit;">void my_exit(void);</h2>
-    Exibe uma mensagem de despedida e termina a execucao do shell.<ReturnsDescription>
-    <p/>
-    <br/>
-    <br/>
-    <h2><a name="cd;">int cd(char *cmd);</h2>
-    Dada uma string como "cd foo", efetua a chamada
-chdir("foo"). Se a chamada falhar, exibe a respectiva 
-mensagem de erro setad por chdir.<ReturnsDescription>
-    <p/>
-    <br/>
-    <br/>
-    <h2><a name="run_builtin;">int run_builtin(char *cmd);</h2>
+        <h2><a name="run_builtin;">int run_builtin(char *cmd);</h2>
     Tenta executar um comando interno do shell (rotinas deifnidas em
 builtincmd.c, declaradas em builtincmd.h). Retorna 1 caso o comando
 tenha sido executado, e 0 se nao.<ReturnsDescription>
