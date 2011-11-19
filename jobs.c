@@ -53,18 +53,6 @@ job_node_t *make_job_node(job_t *job)
 }
 
 
-/**
- * $name make_job_list;
- * $proto job_node_t *make_job_list(job_t *first);
- *
- * Cria uma lista de nos de jobs a partir de um job.
- */
-
-job_node_t *make_job_list(job_t *first)
-{
-    return make_job_node(first);
-}
-
 
 /**
  * $name get_fg_job;
@@ -147,32 +135,33 @@ void delete_job(job_node_t **head, pid_t pid)
 
 /**
  * $name add_job
- * $proto void add_job(job_node_t *head, job_t *new);
+ * $proto job_node_t *add_job(job_node_t *head, job_t *new);
  * 
  * Adiciona um job aa lista que comeca em head.
  */
 
-void add_job(job_node_t *head, job_t *new)
+job_node_t *add_job(job_node_t *head, job_t *new)
 {
-    if (!head)
-    {
-#ifdef debug
-	printf("\n\t(%s): job list is null.\n", __func__);
-#endif
-	return;
-    }
-
-    while (head->next)
-	head = head->next;
-
     job_node_t *newnode = make_job_node(new);
 
-    newnode->prev = head;
-    head->next    = newnode;
+    if (!head)
+    {
+	return newnode;
+    }
+
+    job_node_t *iter = head;
+
+    while (iter->next)
+	iter = iter->next;
+
+    newnode->prev = iter;
+    iter->next    = newnode;
 
 #ifdef debug
-	printf("\n\t(%s): job %d added after %d.\n", __func__, new->pid, head->job->pid);
+	printf("\n\t(%s): job %d added after %d.\n", __func__, new->pid, iter->job->pid);
 #endif
+
+    return head;
     
 }
 

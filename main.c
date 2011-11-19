@@ -23,11 +23,38 @@ char        **path;
 job_node_t  *jobs;
 
 
+/**
+ * $name errexit;
+ * $proto void errexit(char *msg);
+ *
+ * Equivalente a fazer: perror(msg); exit(EXIT_FAILURE);
+ */
+
 void errexit(char *msg)
 {
     perror(msg);
     exit(EXIT_FAILURE);
 }
+
+
+/*
+ * Responsavel fazer a syscall pipe, dado o indice do comando
+ * sendo executado, relativo aos comandos cujo primeiro eh *commands.
+ */
+
+static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
+{
+    if (pipe(pipefd[currentindex]) == -1)
+	errexit("pipe2");
+
+    if  (
+	    currentindex < MAX_PIPES - 1         && 
+	    commands[currentindex + 1]           && 
+	    pipe(pipefd[currentindex + 1]) == -1
+	)
+	errexit("pipe2");
+}
+
 
 /**
  * $name print_shell_name;
@@ -88,7 +115,6 @@ void call_exec(char **tokenized)
 }
 
 
-
 /**
  * $name run_os;
  * $proto void run_os(char *cmd);
@@ -106,70 +132,63 @@ void call_exec(char **tokenized)
 void run_os(char *cmd)
 {
     char **commands = split(cmd, "|");
-    int i = 0, pipefd[100][2];
+    int  i = 0, 
+	 pipefd[MAX_PIPES][2];
+
+    if (string_buffer_length(commands) > MAX_PIPES - 1)
+    {
+	fprintf(stderr, 
+		"\n\tO numero maximo de pipes permitidas eh %d.\n",
+		MAX_PIPES - 1);
+	return;
+    }
 
     for (; commands[i]; i++)
     {
-	if (i > MAX_PIPES - 1)
-	{
-	    fprintf(stderr, "\n\tO numero maximo permitido de pipes eh 100.\n");
-	    return;
-	}
-
+	pipe2(pipefd, i, commands);
+	
 	int foreground;
 	char **tokenized = get_command_tokens(commands[i], &foreground);
 
-	if (pipe(pipefd[i]) == -1)
-	    errexit("pipe");
+	pid_t pid = fork();
 
-	if (i < MAX_PIPES - 1 && commands[i + 1] && pipe(pipefd[i + 1]) == -1)
-	    errexit("pipe2");
-
-	pid_t pid;
-	job_t *newjob;
-	switch ((pid = fork()))
+	if (pid == -1)
 	{
-	    case -1:
-		errexit("fork");
-		break; 
-
-	    case 0:
-		if (i < MAX_PIPES - 1 && commands[i + 1])
-		{
-		    // Write to pipe 
-		    dup2(pipefd[i][1], STDOUT_FILENO);
-		}
-
-		if (i != 0)
-		{
-		    // Read from last process' reading end
-		    dup2(pipefd[i - 1][0], STDIN_FILENO);
-		}
-
-		call_exec(tokenized);
-
-		fprintf(stderr, "\n\tComando nao reconhecido.\n\n");
-		exit(EXIT_FAILURE);
-		break;
-
-	    default:
-		setpgid(pid, 0);
-		newjob = make_job(pid, *tokenized, running, foreground);
-		(jobs == NULL) ? jobs = make_job_list(newjob) : add_job(jobs, newjob);
-		close(pipefd[i][1]);
-
-		if (foreground)
-		{
-#ifdef debug
-		    printf("(%s): Waiting for foreground job %d to finish.\n", __func__, pid);
-#endif
-		    waitpid(pid, NULL, 0);
-		}
-		break;
+	    errexit("fork");
 	}
+	else if (pid == 0)
+	{
+	    if (i < MAX_PIPES - 1 && commands[i + 1])
+		dup2(pipefd[i][1], STDOUT_FILENO); // Write to pipe 
+
+	    if (i != 0)
+		dup2(pipefd[i - 1][0], STDIN_FILENO); // Read from last process' reading end
+
+	    call_exec(tokenized);
+
+	    fprintf(stderr, "\n\tComando nao reconhecido.\n\n");
+	    exit(EXIT_FAILURE);
+	}
+	else
+	{
+	    setpgid(pid, 0);
+	    close(pipefd[i][1]);
+
+	    jobs = add_job(jobs, make_job(pid, *tokenized, running, foreground));
+
+	    if (foreground)
+	    {
+#ifdef debug
+		printf("(%s): Waiting for foreground job %d to finish.\n", __func__, pid);
+#endif
+		waitpid(pid, NULL, 0);
+	    }
+	}
+
+	free_strings(tokenized);
     }
-    
-    free(commands);
+
+    free_strings(commands);
 }
 
 

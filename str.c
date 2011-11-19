@@ -32,6 +32,8 @@ void free_strings(char **buff)
 #endif
 	free(buff[i]);
     }
+    
+    free(buff);
 }
 
 

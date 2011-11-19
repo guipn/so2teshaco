@@ -21,13 +21,19 @@
 <br/>
 
     <h2>Function Summary</h2>
-        <a href="#print_shell_name;"><h3>print_shell_name;</h3></a> <ShortDescription> <br/>
+        <a href="#errexit;"><h3>errexit;</h3></a> <ShortDescription> <br/>
+    <a href="#print_shell_name;"><h3>print_shell_name;</h3></a> <ShortDescription> <br/>
     <a href="#call_exec;"><h3>call_exec;</h3></a> <ShortDescription> <br/>
     <a href="#run_os;"><h3>run_os;</h3></a> <ShortDescription> <br/>
 
     <p/>
     <hr/>
-        <h2><a name="print_shell_name;">void print_shell_name(void);</h2>
+        <h2><a name="errexit;">void errexit(char *msg);</h2>
+    Equivalente a fazer: perror(msg); exit(EXIT_FAILURE);<ReturnsDescription>
+    <p/>
+    <br/>
+    <br/>
+    <h2><a name="print_shell_name;">void print_shell_name(void);</h2>
     Exibe o nome do shell (teshaco) para esperar pelo input
 do usuario.<ReturnsDescription>
     <p/>
