@@ -10,15 +10,15 @@
 
 C_FLAGS = -Wall -Wextra
 
-debug:	
-	rm -rf *.o
-	gcc $(C_FLAGS) -D debug *.c -o shell
-	perl cdoc.pl
-	rm -rf *~
-
 deploy:	
 	rm -rf *.o
 	gcc $(C_FLAGS) *.c -o shell
+	perl cdoc.pl
+	rm -rf *~
+
+debug:	
+	rm -rf *.o
+	gcc $(C_FLAGS) -D debug *.c -o shell
 	perl cdoc.pl
 	rm -rf *~
 
