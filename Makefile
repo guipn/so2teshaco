@@ -1,3 +1,13 @@
+#
+# Shell - Sistemas Operacionais II
+#
+# Prof. F. J. Monaco
+# PAE:  Rene S. P.
+#
+# Guilherme P. Nami
+# 4450128
+#
+
 C_FLAGS = -Wall -Wextra
 
 debug:	
