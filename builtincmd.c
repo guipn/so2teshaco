@@ -23,6 +23,7 @@
 
 extern job_node_t *jobs;
 
+
 /**
  * $name my_exit;
  * $proto void my_exit(void);
@@ -100,6 +101,22 @@ void fg(char *cmd)
 }
 
 
+void help(void)
+{
+    static const char *helpmsg = 
+    "\n\t teshaco - Lista de Comandos\n\t ===========================\n\n"
+    "help, ?\t\tMostrar esta mensagem\n\n"
+    "exit, quit, q\tFechar o shell\n\n"
+    "cd\t\tMudar o working directory (default: o do teshaco)\n\n"
+    "joblist, jls\tListar informacoes sobre jobs\n\n"
+    "fg, foreground\tContinua, em foreground, um processo pausado, dado seu pid\n\n"
+    "bg, background\tContinua, em background, um processo pausado, dado seu pid\n\n"
+    "\n\n";
+
+    puts(helpmsg);
+}
+
+
 /**
  * $name run_builtin;
  * $proto int run_builtin(char *cmd);
@@ -147,7 +164,16 @@ int run_builtin(char *cmd)
 	fg(cmd);
 	return 1;
     }
+    else if (
+		strcmp(cmd, "help")          == 0 ||
+		strcmp(cmd, "?")             == 0
+	    )
+    {
+	help();
+	return 1;
+    }
 
     return 0;
 }
+
 
