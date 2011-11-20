@@ -94,6 +94,12 @@ void call_exec(char **tokenized)
     }
 
     int i = 0;
+    
+    // 2 is strlen("./")
+    char trycwd[2 + strlen(*tokenized) + 1]; 
+    strcpy(trycwd, "./");
+    strcat(trycwd, *tokenized);
+    execv(trycwd, tokenized);
 
     for (; path[i]; i++)
     {
