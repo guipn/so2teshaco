@@ -214,7 +214,7 @@ void print_jobs(job_node_t *head)
 {
     if (!head)
     {
-	puts("\n\tNao ha jobs em execucao.");
+	puts("\n\tNenhum job foi registrado ainda.");
 	return;
     }
 
