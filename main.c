@@ -210,10 +210,8 @@ void run_os(char *cmd)
 		dup2(pipefd[crr_pipe_index(i)][1], STDOUT_FILENO); 
 
 	    if (i != 0)
-	    {
 		// Read from last process' reading end
 		dup2(pipefd[prv_pipe_index(i)][0], STDIN_FILENO); 
-	    }
 
 	    call_exec(tokenized);
 
