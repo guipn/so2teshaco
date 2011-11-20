@@ -89,7 +89,5 @@ void release_resources(void)
 
     if (path)
         free_strings(path);
-
-    free(path);
 }
 
