@@ -250,7 +250,7 @@ void run_os(char *cmd)
 	free_strings(tokenized);
     }
 
-    close(pipefd[prv_pipe_index(i)][1]);
+    ensure_close( close(pipefd[prv_pipe_index(i)][1]) );
     free_strings(commands);
 }
 
