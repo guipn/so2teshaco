@@ -14,6 +14,9 @@
 
 int redirect_io(char **);
 void handle_pipe(int, int, int *);
+void ensure_open(int);
+void ensure_close(int);
+void ensure_dup2(int);
 
 #endif
 

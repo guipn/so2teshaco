@@ -23,9 +23,6 @@
 #include <stdio.h>
 #endif
 
-static void ensure_open(int);
-static void ensure_close(int);
-static void ensure_dup2(int);
 static void out_append(char *);
 static void out_overwrite(char *);
 static void err_append(char *);
@@ -33,7 +30,7 @@ static void err_overwrite(char *);
 static void in(char *);
 
 
-static void ensure_open(int openret)
+void ensure_open(int openret)
 {
     if (openret == -1)
     {
@@ -43,7 +40,7 @@ static void ensure_open(int openret)
 }
 
 
-static void ensure_close(int closeret)
+void ensure_close(int closeret)
 {
     if (closeret == -1)
     {
@@ -53,7 +50,7 @@ static void ensure_close(int closeret)
 }
 
 
-static void ensure_dup2(int dup2ret)
+void ensure_dup2(int dup2ret)
 {
     if (dup2ret == -1)
     {

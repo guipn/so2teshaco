@@ -47,8 +47,6 @@ void errexit(char *msg)
 }
 
 
-
-
 /**
  * $name print_shell_name;
  * $proto void print_shell_name(void);
@@ -95,21 +93,19 @@ void call_exec(char **tokenized)
 
     int i = 0;
     
-    // 2 is strlen("./")
-    char trycwd[2 + strlen(*tokenized) + 1]; 
-    strcpy(trycwd, "./");
-    strcat(trycwd, *tokenized);
+    char trycwd[strlen(*tokenized) + 1]; 
+    strcpy(trycwd, *tokenized);
     execv(trycwd, tokenized);
 
     for (; path[i]; i++)
     {
 	size_t len = strlen(path[i]) + strlen(*tokenized);
-	char try_path[len + 2];
+	char   trypath[len + 2];
 
-	strcpy(try_path, path[i]);
-	strcat(try_path, "/");
-	strcat(try_path, *tokenized);
-	execv(try_path, tokenized);
+	strcpy(trypath, path[i]);
+	strcat(trypath, "/");
+	strcat(trypath, *tokenized);
+	execv(trypath, tokenized);
     }
 }
 
@@ -128,6 +124,7 @@ static int crr_pipe_index(int counter)
     return counter % 3;
 }
 
+
 /*
  * Retorna o indice do vetor de pipes usado
  * antes do indice atual.
@@ -145,7 +142,11 @@ static int prv_pipe_index(int counter)
 	    fprintf(stderr, "\n\tO impossivel aconteceu em %s.\n\n", __func__);
 	    exit(EXIT_FAILURE);
     }
+
+    fprintf(stderr, "\n\tO impossivel aconteceu em %s.\n\n", __func__);
+    exit(EXIT_FAILURE);
 }
+
 
 /*
  * Retorna o proximo indice do vetor de pipes
@@ -165,12 +166,15 @@ static int nxt_pipe_index(int counter)
 
 static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
 {
-    if (pipe(pipefd[crr_pipe_index(currentindex)]) == -1)
+    int curr = crr_pipe_index(currentindex),
+	next = nxt_pipe_index(currentindex);
+
+    if (pipe(pipefd[curr]) == -1)
 	errexit("pipe2");
 
     if  (
-	    commands[currentindex + 1]                           && 
-	    pipe(pipefd[nxt_pipe_index(currentindex)]) == -1
+	    commands[currentindex + 1] && 
+	    pipe(pipefd[next]) == -1
 	)
 	errexit("pipe2");
 }
@@ -193,8 +197,8 @@ static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
 void run_os(char *cmd)
 {
     char **commands = split(cmd, "|");
-    int  i = 0, 
-	 pipefd[3][2];
+    int pipefd[3][2],
+	i = 0;
 
     for (; commands[i]; i++)
     {
@@ -204,20 +208,22 @@ void run_os(char *cmd)
 	char **tokenized = get_command_tokens(commands[i], &foreground);
 
 	pid_t pid = fork();
-
 	if (pid == -1)
 	{
 	    errexit("fork");
 	}
 	else if (pid == 0)
 	{
+	    int curr = crr_pipe_index(i),
+		prev = prv_pipe_index(i);
+
 	    if (commands[i + 1])
 		// Write to pipe 
-		dup2(pipefd[crr_pipe_index(i)][1], STDOUT_FILENO); 
+		ensure_dup2(dup2(pipefd[curr][1], STDOUT_FILENO));
 
 	    if (i != 0)
 		// Read from last process' reading end
-		dup2(pipefd[prv_pipe_index(i)][0], STDIN_FILENO); 
+		ensure_dup2(dup2(pipefd[prev][0], STDIN_FILENO)); 
 
 	    call_exec(tokenized);
 
@@ -233,7 +239,8 @@ void run_os(char *cmd)
 	    if (foreground)
 	    {
 #ifdef debug
-		printf("(%s): Waiting for foreground job %d to finish.\n", __func__, pid);
+		printf("(%s): Waiting for foreground job %d" 
+		       " to finish.\n", __func__, pid);
 #endif
 		waitpid(pid, NULL, 0);
 		close(pipefd[crr_pipe_index(i)][1]);
@@ -252,8 +259,9 @@ void run_os(char *cmd)
 int main(void)
 {
     if (atexit(release_resources) != 0)
-	fprintf(stderr, "\n\t*** Erro ao registrar rotina de limpeza."
-			" Pode haver vazamento de memoria. *** \n\n");
+	fprintf(stderr, 
+		"\n\t*** Erro ao registrar rotina de limpeza."
+		" Pode haver vazamento de memoria. *** \n\n");
 
    sig_setup();
 
