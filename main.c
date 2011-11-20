@@ -48,23 +48,6 @@ void errexit(char *msg)
 }
 
 
-/*
- * Responsavel fazer a syscall pipe, dado o indice do comando
- * sendo executado, relativo aos comandos cujo primeiro eh *commands.
- */
-
-static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
-{
-    if (pipe(pipefd[currentindex]) == -1)
-	errexit("pipe2");
-
-    if  (
-	    currentindex < MAX_PIPES - 1         && 
-	    commands[currentindex + 1]           && 
-	    pipe(pipefd[currentindex + 1]) == -1
-	)
-	errexit("pipe2");
-}
 
 
 /**
@@ -126,6 +109,69 @@ void call_exec(char **tokenized)
 }
 
 
+/*
+ * Dado o indice do comando sendo executado, 
+ * retorna o indice da proxima posicao do vetor de
+ * pipes que sera usado.
+ *
+ * O vetor de pipes sempre terah somente 3 posicoes,
+ * independente do numero de pipes final.
+ */
+
+static int crr_pipe_index(int counter)
+{
+    return counter % 3;
+}
+
+/*
+ * Retorna o indice do vetor de pipes usado
+ * antes do indice atual.
+ */
+
+static int prv_pipe_index(int counter)
+{
+    switch (crr_pipe_index(counter))
+    {
+	case 0: return 2;
+	case 1: return 0;
+	case 2: return 1;
+		
+	default:
+	    fprintf(stderr, "\n\tO impossivel aconteceu em %s.\n\n", __func__);
+	    exit(EXIT_FAILURE);
+    }
+}
+
+/*
+ * Retorna o proximo indice do vetor de pipes
+ * relativo ao indice atual.
+ */
+
+static int nxt_pipe_index(int counter)
+{
+    return crr_pipe_index(counter) + 1 % 3;
+}
+
+
+/*
+ * Responsavel fazer a syscall pipe, dado o indice do comando
+ * sendo executado, relativo aos comandos cujo primeiro eh *commands.
+ */
+
+static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
+{
+    if (pipe(pipefd[crr_pipe_index(currentindex)]) == -1)
+	errexit("pipe2");
+
+    if  (
+	    currentindex < MAX_PIPES - 1                         && 
+	    commands[currentindex + 1]                           && 
+	    pipe(pipefd[nxt_pipe_index(currentindex)]) == -1
+	)
+	errexit("pipe2");
+}
+
+
 /**
  * $name run_os;
  * $proto void run_os(char *cmd);
@@ -144,7 +190,7 @@ void run_os(char *cmd)
 {
     char **commands = split(cmd, "|");
     int  i = 0, 
-	 pipefd[MAX_PIPES][2];
+	 pipefd[3][2];
 
     if (string_buffer_length(commands) > MAX_PIPES - 1)
     {
@@ -169,11 +215,15 @@ void run_os(char *cmd)
 	}
 	else if (pid == 0)
 	{
-	    if (i < MAX_PIPES - 1 && commands[i + 1])
-		dup2(pipefd[i][1], STDOUT_FILENO); // Write to pipe 
+	    if (commands[i + 1])
+		// Write to pipe 
+		dup2(pipefd[crr_pipe_index(i)][1], STDOUT_FILENO); 
 
 	    if (i != 0)
-		dup2(pipefd[i - 1][0], STDIN_FILENO); // Read from last process' reading end
+	    {
+		// Read from last process' reading end
+		dup2(pipefd[prv_pipe_index(i)][0], STDIN_FILENO); 
+	    }
 
 	    call_exec(tokenized);
 
@@ -183,7 +233,6 @@ void run_os(char *cmd)
 	else
 	{
 	    setpgid(pid, 0);
-	    close(pipefd[i][1]);
 
 	    jobs = add_job(jobs, make_job(pid, *tokenized, running, foreground));
 
@@ -193,11 +242,14 @@ void run_os(char *cmd)
 		printf("(%s): Waiting for foreground job %d to finish.\n", __func__, pid);
 #endif
 		waitpid(pid, NULL, 0);
+		close(pipefd[crr_pipe_index(i)][1]);
 	    }
 	}
 
 	free_strings(tokenized);
     }
+
+    close(pipefd[prv_pipe_index(i)][1]);
 
     free_strings(commands);
 }
