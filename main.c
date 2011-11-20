@@ -27,7 +27,6 @@
 #include <unistd.h>
 
 #define SHELL_NAME "teshaco"
-#define MAX_PIPES  100
 
 
 char        **path;
@@ -164,7 +163,6 @@ static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
 	errexit("pipe2");
 
     if  (
-	    currentindex < MAX_PIPES - 1                         && 
 	    commands[currentindex + 1]                           && 
 	    pipe(pipefd[nxt_pipe_index(currentindex)]) == -1
 	)
@@ -191,14 +189,6 @@ void run_os(char *cmd)
     char **commands = split(cmd, "|");
     int  i = 0, 
 	 pipefd[3][2];
-
-    if (string_buffer_length(commands) > MAX_PIPES - 1)
-    {
-	fprintf(stderr, 
-		"\n\tO numero maximo de pipes permitidas eh %d.\n",
-		MAX_PIPES - 1);
-	return;
-    }
 
     for (; commands[i]; i++)
     {
@@ -250,7 +240,6 @@ void run_os(char *cmd)
     }
 
     close(pipefd[prv_pipe_index(i)][1]);
-
     free_strings(commands);
 }
 
