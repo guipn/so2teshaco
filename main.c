@@ -76,7 +76,7 @@ void print_shell_name(void)
  * Exemplo: 
  *
  * strcpy(buffer, "ls /");
- * run_exec(split(buffer, " "));
+ * call_exec(split(buffer, " "));
  */
 
 void call_exec(char **tokenized)

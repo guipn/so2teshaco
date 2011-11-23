@@ -1,0 +1,68 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+INIT_LINE_SIZE	str.c	19;"	d	file:
+SHELL_NAME	main.c	29;"	d	file:
+_malloc	memory.c	/^void *_malloc(size_t size)$/;"	f
+_realloc	memory.c	/^void *_realloc(void *orig, size_t new_size)$/;"	f
+action_CHLD	sig.c	/^static struct sigaction action_CHLD;$/;"	v	typeref:struct:sigaction	file:
+action_TSTP	sig.c	/^static struct sigaction action_TSTP;$/;"	v	typeref:struct:sigaction	file:
+add_job	jobs.c	/^job_node_t *add_job(job_node_t *head, job_t *new)$/;"	f
+bg	builtincmd.c	/^static void bg(char *cmd)$/;"	f	file:
+call_exec	main.c	/^void call_exec(char **tokenized)$/;"	f
+cd	builtincmd.c	/^static int cd(char *cmd)$/;"	f	file:
+children_sig_setup	sig.c	/^void children_sig_setup(void)$/;"	f
+concat	str.c	/^char *concat(unsigned int count, char *first, ...)$/;"	f
+crr_pipe_index	main.c	/^static int crr_pipe_index(int counter)$/;"	f	file:
+delete_job	jobs.c	/^void delete_job(job_node_t **head, pid_t pid)$/;"	f
+destroy_job_list	jobs.c	/^void destroy_job_list(job_node_t *head)$/;"	f
+ensure_close	io.c	/^void ensure_close(int closeret)$/;"	f
+ensure_dup2	io.c	/^void ensure_dup2(int dup2ret)$/;"	f
+ensure_open	io.c	/^void ensure_open(int openret)$/;"	f
+err_append	io.c	/^static void err_append(char *path)$/;"	f	file:
+err_overwrite	io.c	/^static void err_overwrite(char *path)$/;"	f	file:
+errexit	main.c	/^void errexit(char *msg)$/;"	f
+error	memory.c	/^static void error(char *msg)$/;"	f	file:
+fg	builtincmd.c	/^static void fg(char *cmd)$/;"	f	file:
+free_strings	str.c	/^void free_strings(char **buff)$/;"	f
+get_command_tokens	str.c	/^char **get_command_tokens(char *cmd, int *foreground)$/;"	f
+get_fg_job	jobs.c	/^job_t *get_fg_job(job_node_t *list)$/;"	f
+get_job	jobs.c	/^job_t *get_job(job_node_t *list, pid_t pid)$/;"	f
+handle_CHLD	sig.c	/^void handle_CHLD(int sig, siginfo_t *info, void *context)$/;"	f
+handle_TSTP	sig.c	/^void handle_TSTP(int sig, siginfo_t *info, void *context)$/;"	f
+handle_pipe	io.c	/^void handle_pipe(int cmdindex, int lastindex, int *pipefd)$/;"	f
+help	builtincmd.c	/^static void help(void)$/;"	f	file:
+in	io.c	/^static void in(char *path)$/;"	f	file:
+invoke_bg	jobs.c	/^void invoke_bg(job_node_t *list, pid_t pid)$/;"	f
+invoke_fg	jobs.c	/^void invoke_fg(job_node_t *list, pid_t pid)$/;"	f
+jobs	main.c	/^job_node_t  *jobs;$/;"	v
+join	str.c	/^char *join(char *strs[], char *glue)$/;"	f
+main	main.c	/^int main(void)$/;"	f
+make_job	jobs.c	/^job_t *make_job(pid_t pid, char *name, enum job_state status, char fg)$/;"	f
+make_job_node	jobs.c	/^job_node_t *make_job_node(job_t *job)$/;"	f
+my_exit	builtincmd.c	/^static void my_exit(void)$/;"	f	file:
+nxt_pipe_index	main.c	/^static int nxt_pipe_index(int counter)$/;"	f	file:
+old_CHLD	sig.c	/^static struct sigaction old_CHLD;$/;"	v	typeref:struct:sigaction	file:
+old_TSTP	sig.c	/^static struct sigaction old_TSTP;$/;"	v	typeref:struct:sigaction	file:
+out_append	io.c	/^static void out_append(char *path)$/;"	f	file:
+out_overwrite	io.c	/^static void out_overwrite(char *path)$/;"	f	file:
+parse_PATH	str.c	/^char **parse_PATH(void)$/;"	f
+path	main.c	/^char        **path;$/;"	v
+pipe2	main.c	/^static void pipe2(int (*pipefd)[2], int currentindex, char **commands)$/;"	f	file:
+print_jobs	jobs.c	/^void print_jobs(job_node_t *head)$/;"	f
+print_shell_name	main.c	/^void print_shell_name(void)$/;"	f
+prv_pipe_index	main.c	/^static int prv_pipe_index(int counter)$/;"	f	file:
+read_line	str.c	/^char *read_line(FILE *stream)$/;"	f
+redirect_io	io.c	/^int redirect_io(char **tokenized)$/;"	f
+release_resources	memory.c	/^void release_resources(void)$/;"	f
+run_builtin	builtincmd.c	/^int run_builtin(char *cmd)$/;"	f
+run_os	main.c	/^void run_os(char *cmd)$/;"	f
+show_jobs	builtincmd.c	/^static void show_jobs(void)$/;"	f	file:
+sig_setup	sig.c	/^void sig_setup(void)$/;"	f
+split	str.c	/^char **split(char *line, char *sep)$/;"	f
+split_on_str	str.c	/^char **split_on_str(char *target, char *separator)$/;"	f
+string_buffer_length	str.c	/^size_t string_buffer_length(char **buffer)$/;"	f
+update_status	jobs.c	/^void update_status(job_t *job, int status)$/;"	f
