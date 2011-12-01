@@ -121,7 +121,7 @@ void call_exec(char **tokenized)
 
 static int crr_pipe_index(int counter)
 {
-    return counter % 3;
+    return counter % 2;
 }
 
 
@@ -132,30 +132,7 @@ static int crr_pipe_index(int counter)
 
 static int prv_pipe_index(int counter)
 {
-    switch (crr_pipe_index(counter))
-    {
-	case 0: return 2;
-	case 1: return 0;
-	case 2: return 1;
-		
-	default:
-	    fprintf(stderr, "\n\tO impossivel aconteceu em %s.\n\n", __func__);
-	    exit(EXIT_FAILURE);
-    }
-
-    fprintf(stderr, "\n\tO impossivel aconteceu em %s.\n\n", __func__);
-    exit(EXIT_FAILURE);
-}
-
-
-/*
- * Retorna o proximo indice do vetor de pipes
- * relativo ao indice atual.
- */
-
-static int nxt_pipe_index(int counter)
-{
-    return crr_pipe_index(counter) + 1 % 3;
+    return crr_pipe_index(counter) == 0 ? 1 : 0;
 }
 
 
@@ -164,18 +141,11 @@ static int nxt_pipe_index(int counter)
  * sendo executado, relativo aos comandos cujo primeiro eh *commands.
  */
 
-static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
+static void pipe2(int (*pipefd)[2], int currentindex)
 {
-    int curr = crr_pipe_index(currentindex),
-	next = nxt_pipe_index(currentindex);
+    int curr = crr_pipe_index(currentindex);
 
     if (pipe(pipefd[curr]) == -1)
-	errexit("pipe2");
-
-    if  (
-	    commands[currentindex + 1] && 
-	    pipe(pipefd[next]) == -1
-	)
 	errexit("pipe2");
 }
 
@@ -197,12 +167,12 @@ static void pipe2(int (*pipefd)[2], int currentindex, char **commands)
 void run_os(char *cmd)
 {
     char **commands = split(cmd, "|");
-    int pipefd[3][2],
+    int pipefd[2][2],
 	i = 0;
 
     for (; commands[i]; i++)
     {
-	pipe2(pipefd, i, commands);
+	pipe2(pipefd, i);
 	
 	int foreground;
 	char **tokenized = get_command_tokens(commands[i], &foreground);
