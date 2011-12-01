@@ -26,6 +26,25 @@ static struct sigaction old_TSTP;
 static struct sigaction action_CHLD;
 static struct sigaction old_CHLD;
 
+static struct sigaction action_INT;
+static struct sigaction old_INT;
+
+/**
+ * $name handle_INT;
+ * $proto void handle_INT(int sig, siginfo_t *info, void *context);
+ *
+ * Responsavel por tratar SIGTSTP.
+ */
+
+void handle_INT(int sig, siginfo_t *info, void *context)
+{
+    (void) sig;
+    (void) info;
+    (void) context;
+    
+    return;
+}
+
 
 /**
  * $name handle_TSTP;
@@ -101,6 +120,14 @@ void handle_CHLD(int sig, siginfo_t *info, void *context)
 
 void sig_setup(void)
 {
+    sigemptyset(&action_INT.sa_mask);
+    action_INT.sa_flags     = SA_SIGINFO;
+    action_INT.sa_sigaction = handle_INT;
+
+    if (sigaction(SIGINT, &action_INT, &old_INT) == -1)
+	fprintf(stderr, "\n\tErro ao tentar instalar handler para SIGINT."); 
+
+
     sigemptyset(&action_TSTP.sa_mask);
     action_TSTP.sa_flags     = SA_SIGINFO;
     action_TSTP.sa_sigaction = handle_TSTP;
@@ -130,5 +157,6 @@ void children_sig_setup(void)
 {
     sigaction(SIGTSTP, &old_TSTP, NULL);
     sigaction(SIGCHLD, &old_CHLD, NULL);
+    sigaction(SIGINT, &old_INT, NULL);
 }
 

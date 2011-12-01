@@ -16,14 +16,20 @@
 
     
     <h2>Function Summary</h2>
-        <a href="#handle_TSTP;"><h3>handle_TSTP;</h3></a> <ShortDescription> <br/>
+        <a href="#handle_INT;"><h3>handle_INT;</h3></a> <ShortDescription> <br/>
+    <a href="#handle_TSTP;"><h3>handle_TSTP;</h3></a> <ShortDescription> <br/>
     <a href="#handle_CHLD;"><h3>handle_CHLD;</h3></a> <ShortDescription> <br/>
     <a href="#sig_setup;"><h3>sig_setup;</h3></a> <ShortDescription> <br/>
     <a href="#children_sig_setup;"><h3>children_sig_setup;</h3></a> <ShortDescription> <br/>
 
     <p/>
     <hr/>
-        <h2><a name="handle_TSTP;">void handle_TSTP(int sig, siginfo_t *info, void *context);</h2>
+        <h2><a name="handle_INT;">void handle_INT(int sig, siginfo_t *info, void *context);</h2>
+    Responsavel por tratar SIGTSTP.<ReturnsDescription>
+    <p/>
+    <br/>
+    <br/>
+    <h2><a name="handle_TSTP;">void handle_TSTP(int sig, siginfo_t *info, void *context);</h2>
     Responsavel por tratar SIGTSTP.<ReturnsDescription>
     <p/>
     <br/>
