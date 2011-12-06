@@ -9,6 +9,7 @@ SHELL_NAME	main.c	29;"	d	file:
 _malloc	memory.c	/^void *_malloc(size_t size)$/;"	f
 _realloc	memory.c	/^void *_realloc(void *orig, size_t new_size)$/;"	f
 action_CHLD	sig.c	/^static struct sigaction action_CHLD;$/;"	v	typeref:struct:sigaction	file:
+action_INT	sig.c	/^static struct sigaction action_INT;$/;"	v	typeref:struct:sigaction	file:
 action_TSTP	sig.c	/^static struct sigaction action_TSTP;$/;"	v	typeref:struct:sigaction	file:
 add_job	jobs.c	/^job_node_t *add_job(job_node_t *head, job_t *new)$/;"	f
 bg	builtincmd.c	/^static void bg(char *cmd)$/;"	f	file:
@@ -32,6 +33,7 @@ get_command_tokens	str.c	/^char **get_command_tokens(char *cmd, int *foreground)
 get_fg_job	jobs.c	/^job_t *get_fg_job(job_node_t *list)$/;"	f
 get_job	jobs.c	/^job_t *get_job(job_node_t *list, pid_t pid)$/;"	f
 handle_CHLD	sig.c	/^void handle_CHLD(int sig, siginfo_t *info, void *context)$/;"	f
+handle_INT	sig.c	/^void handle_INT(int sig, siginfo_t *info, void *context)$/;"	f
 handle_TSTP	sig.c	/^void handle_TSTP(int sig, siginfo_t *info, void *context)$/;"	f
 handle_pipe	io.c	/^void handle_pipe(int cmdindex, int lastindex, int *pipefd)$/;"	f
 help	builtincmd.c	/^static void help(void)$/;"	f	file:
@@ -44,14 +46,14 @@ main	main.c	/^int main(void)$/;"	f
 make_job	jobs.c	/^job_t *make_job(pid_t pid, char *name, enum job_state status, char fg)$/;"	f
 make_job_node	jobs.c	/^job_node_t *make_job_node(job_t *job)$/;"	f
 my_exit	builtincmd.c	/^static void my_exit(void)$/;"	f	file:
-nxt_pipe_index	main.c	/^static int nxt_pipe_index(int counter)$/;"	f	file:
 old_CHLD	sig.c	/^static struct sigaction old_CHLD;$/;"	v	typeref:struct:sigaction	file:
+old_INT	sig.c	/^static struct sigaction old_INT;$/;"	v	typeref:struct:sigaction	file:
 old_TSTP	sig.c	/^static struct sigaction old_TSTP;$/;"	v	typeref:struct:sigaction	file:
 out_append	io.c	/^static void out_append(char *path)$/;"	f	file:
 out_overwrite	io.c	/^static void out_overwrite(char *path)$/;"	f	file:
 parse_PATH	str.c	/^char **parse_PATH(void)$/;"	f
 path	main.c	/^char        **path;$/;"	v
-pipe2	main.c	/^static void pipe2(int (*pipefd)[2], int currentindex, char **commands)$/;"	f	file:
+pipe2	main.c	/^static void pipe2(int (*pipefd)[2], int currentindex)$/;"	f	file:
 print_jobs	jobs.c	/^void print_jobs(job_node_t *head)$/;"	f
 print_shell_name	main.c	/^void print_shell_name(void)$/;"	f
 prv_pipe_index	main.c	/^static int prv_pipe_index(int counter)$/;"	f	file:

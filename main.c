@@ -213,7 +213,7 @@ void run_os(char *cmd)
 		       " to finish.\n", __func__, pid);
 #endif
 		waitpid(pid, NULL, 0);
-		ensure_close( close(pipefd[crr_pipe_index(i)][1]) );
+		ensure_close( close( pipefd[ crr_pipe_index(i) ][1] ) );
 	    }
 	}
 
